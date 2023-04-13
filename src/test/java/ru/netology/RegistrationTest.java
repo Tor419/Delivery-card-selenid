@@ -26,21 +26,176 @@ public class RegistrationTest {
         Configuration.timeout = 15000;
         open("http://localhost:9999/");
     }
+
     public String generateDate(long addDays, String pattern) {
         return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern(pattern));
     }
 
     @Test
     void shouldRegisterByAccountNumberDOMModification() {
-        $("[placeholder='Город']").setValue("Москва");
+        $("[placeholder='Город']").setValue("Йошкар-Ола");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
         String planningDate = generateDate(3, "dd.MM.yyyy");
         $("[placeholder='Дата встречи']").setValue(planningDate);
-        $("[name='name']").setValue("Иванов Иван");
+        $("[name='name']").setValue("Иванов-Борисов Павел");
         $("[name='phone']").setValue("+71234567890");
         $("[data-test-id='agreement']").click();
         $x("//div/button").click();
         $x("//div[contains(text(), 'Встреча успешно забронирована')]").shouldBe(visible);
+    }
+
+    @Test
+    void shouldRegisterErrorEmptyFieldCity() {
+        $("[placeholder='Город']").setValue("");
+        $("[placeholder='Дата встречи']").doubleClick();
+        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
+        String planningDate = generateDate(3, "dd.MM.yyyy");
+        $("[placeholder='Дата встречи']").setValue(planningDate);
+        $("[name='name']").setValue("Иванов-Борисов Павел");
+        $("[name='phone']").setValue("+71234567890");
+        $("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $x("//div//span[contains(text(), 'Поле обязательно для заполнения')]").shouldBe(visible);
+    }
+
+    @Test
+    void shouldRegisterErrorNotFindCity() {
+        $("[placeholder='Город']").setValue("Енгельс");
+        $("[placeholder='Дата встречи']").doubleClick();
+        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
+        String planningDate = generateDate(3, "dd.MM.yyyy");
+        $("[placeholder='Дата встречи']").setValue(planningDate);
+        $("[name='name']").setValue("Иванов-Борисов Павел");
+        $("[name='phone']").setValue("+71234567890");
+        $("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $x("//div//span[contains(text(), 'Доставка в выбранный город недоступна')]").shouldBe(visible);
+    }
+
+    @Test
+    void shouldRegisterErrorEmptyFieldData() {
+        $("[placeholder='Город']").setValue("Новосибирск");
+        $("[placeholder='Дата встречи']").doubleClick();
+        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
+        String planningDate = generateDate(3, "dd.MM.yyyy");
+        //$("[placeholder='Дата встречи']").setValue(planningDate);
+        $("[name='name']").setValue("Иванов-Борисов Павел");
+        $("[name='phone']").setValue("+71234567890");
+        $("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $x("//div//span[contains(text(), 'Неверно введена дата')]").shouldBe(visible);
+    }
+
+    @Test
+    void shouldRegisterErrorFieldData() {
+        $("[placeholder='Город']").setValue("Новосибирск");
+        $("[placeholder='Дата встречи']").doubleClick();
+        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
+        String planningDate = generateDate(3, "dd.MM.yyyy");
+        $("[placeholder='Дата встречи']").setValue("15.04.2023");
+        $("[name='name']").setValue("Иванов-Борисов Павел");
+        $("[name='phone']").setValue("+71234567890");
+        $("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $x("//div//span[contains(text(), 'Заказ на выбранную дату невозможен')]").shouldBe(visible);
+    }
+
+    @Test
+    void shouldRegisterErrorEmptyFieldName() {
+        $("[placeholder='Город']").setValue("Новосибирск");
+        $("[placeholder='Дата встречи']").doubleClick();
+        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
+        String planningDate = generateDate(3, "dd.MM.yyyy");
+        $("[placeholder='Дата встречи']").setValue(planningDate);
+        $("[name='name']").setValue("");
+        $("[name='phone']").setValue("+71234567890");
+        $("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $x("//div//span[contains(text(), 'Поле обязательно для заполнения')]").shouldBe(visible);
+    }
+
+    @Test
+    void shouldRegisterErrorFieldNameShouldContainRUSCharacter() {
+        $("[placeholder='Город']").setValue("Новосибирск");
+        $("[placeholder='Дата встречи']").doubleClick();
+        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
+        String planningDate = generateDate(3, "dd.MM.yyyy");
+        $("[placeholder='Дата встречи']").setValue(planningDate);
+        $("[name='name']").setValue("Jack London");
+        $("[name='phone']").setValue("+71234567890");
+        $("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $x("//div//span[contains(text(), 'Имя и Фамилия указаные неверно.')]").shouldBe(visible);
+    }
+
+    @Test
+    void shouldRegisterErrorEmptyFieldPhone() {
+        $("[placeholder='Город']").setValue("Новосибирск");
+        $("[placeholder='Дата встречи']").doubleClick();
+        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
+        String planningDate = generateDate(3, "dd.MM.yyyy");
+        $("[placeholder='Дата встречи']").setValue(planningDate);
+        $("[name='name']").setValue("Петров Николай");
+        $("[name='phone']").setValue("");
+        $("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $x("//div//span[contains(text(), 'Поле обязательно для заполнения')]").shouldBe(visible);
+    }
+
+    @Test
+    void shouldRegisterErrorFieldPhoneNoOneCharacter() {
+        $("[placeholder='Город']").setValue("Новосибирск");
+        $("[placeholder='Дата встречи']").doubleClick();
+        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
+        String planningDate = generateDate(3, "dd.MM.yyyy");
+        $("[placeholder='Дата встречи']").setValue(planningDate);
+        $("[name='name']").setValue("Петров Николай");
+        $("[name='phone']").setValue("5");
+        $("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $x("//div//span[contains(text(), 'Телефон указан неверно.')]").shouldBe(visible);
+    }
+
+    @Test
+    void shouldRegisterErrorFieldPhoneNoMoreThirteenCharacter() {
+        $("[placeholder='Город']").setValue("Новосибирск");
+        $("[placeholder='Дата встречи']").doubleClick();
+        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
+        String planningDate = generateDate(3, "dd.MM.yyyy");
+        $("[placeholder='Дата встречи']").setValue(planningDate);
+        $("[name='name']").setValue("Петров Николай");
+        $("[name='phone']").setValue("+793456789012");
+        $("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $x("//div//span[contains(text(), 'Телефон указан неверно.')]").shouldBe(visible);
+    }
+
+    @Test
+    void shouldRegisterErrorFieldPhoneNoPlusSign() {
+        $("[placeholder='Город']").setValue("Новосибирск");
+        $("[placeholder='Дата встречи']").doubleClick();
+        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
+        String planningDate = generateDate(3, "dd.MM.yyyy");
+        $("[placeholder='Дата встречи']").setValue(planningDate);
+        $("[name='name']").setValue("Петров Николай");
+        $("[name='phone']").setValue("79345678901");
+        $("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $x("//div//span[contains(text(), 'Телефон указан неверно.')]").shouldBe(visible);
+    }
+
+    @Test
+    void shouldRegisterErrorCheckboxIsNotSet() {
+        $("[placeholder='Город']").setValue("Новосибирск");
+        $("[placeholder='Дата встречи']").doubleClick();
+        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
+        String planningDate = generateDate(3, "dd.MM.yyyy");
+        $("[placeholder='Дата встречи']").setValue(planningDate);
+        $("[name='name']").setValue("Петров Николай");
+        $("[name='phone']").setValue("+79345678901");
+        //$("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $x("//div//span[contains(text(), 'Я соглашаюсь с условиями обработки')]").shouldBe(visible);
     }
 }
