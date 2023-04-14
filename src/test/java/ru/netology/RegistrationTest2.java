@@ -22,7 +22,7 @@ public class RegistrationTest2 {
 
     @BeforeEach
     void setUp() {
-        //Configuration.headless = true;
+        Configuration.headless = true;
         Configuration.holdBrowserOpen = true;
         Configuration.browserSize = "1800x1100";
         Configuration.timeout = 15000;
@@ -34,7 +34,7 @@ public class RegistrationTest2 {
     }
 
     @Test
-    void shouldRegisterByAccountWithCityPopUp() {
+    void shouldRegisterByAccountWithCityPopUpTest() {
         $("[placeholder='Город']").setValue("Ка");
         $(byText("Калининград")).click();
         String planningDate = generateDate(7, 0, 0, "dd.MM.yyyy");
@@ -47,12 +47,12 @@ public class RegistrationTest2 {
     }
 
     @Test
-    void shouldRegisterByAccountWithCalendarPopUpForOneWeek() {
+    void shouldRegisterByAccountWithCalendarPopUpForOneWeekTest() {
         $("[placeholder='Город']").setValue("Ка");
         $(byText("Калининград")).click();
         String planningDate = generateDate(7, 0, 0, "dd.MM.yyyy");
         $(".icon_name_calendar").click();
-        $x("//div//tr[5]/td[4]").click();
+        $x("//div//tr[5]/td[5]").click();
         $("[name='name']").setValue("Иванов Иван");
         $("[name='phone']").setValue("+71234567890");
         $("[data-test-id='agreement']").click();
@@ -61,16 +61,24 @@ public class RegistrationTest2 {
     }
 
     @Test
-    void shouldCalendarMoveToTheNextMonth() {
+    void shouldCalendarMoveToTheNextMonthTest() {
         $(".icon_name_calendar").click();
-        $$("//div[contains(@class, 'calendar__arrow calendar__arrow_direction_right')]").filter(visible).get(0).click();
-        $x("//div[contains(text(), 'Май 2023')]").shouldBe(visible);
+        $x("/html/body/div[2]/div//div[4]").click();
+        $(byText("Май 2023")).shouldBe(Condition.visible);
     }
 
     @Test
-    void shouldCalendarMoveToTheNextYear() {
+    void shouldCalendarMoveToTheNextYearTest() {
         $(".icon_name_calendar").click();
-        $$("//div[contains(@class, 'calendar__arrow calendar__arrow_direction_right')]").filter(visible).get(1).click();
-        $x("//div[contains(text(), 'Апрель 2024')]").shouldBe(visible);
+        $x("/html/body/div[2]/div//div[3]").click();
+        $(byText("Апрель 2024")).shouldBe(Condition.visible);
+    }
+
+    @Test
+    void shouldCalendarMoveToTheBackTest() {
+        $(".icon_name_calendar").click();
+        $x("/html/body/div[2]/div//div[4]").click();
+        $x("/html/body/div[2]/div//div[2]").click();
+        $(byText("Апрель 2023")).shouldBe(Condition.visible);
     }
 }

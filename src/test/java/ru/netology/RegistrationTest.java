@@ -32,7 +32,7 @@ public class RegistrationTest {
     }
 
     @Test
-    void shouldRegisterByAccountNumberDOMModification() {
+    void shouldRegisterByAccountNumberDOMModificationTest() {
         $("[placeholder='Город']").setValue("Йошкар-Ола");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
@@ -46,7 +46,7 @@ public class RegistrationTest {
     }
 
     @Test
-    void shouldRegisterErrorEmptyFieldCity() {
+    void shouldRegisterErrorEmptyFieldCityTest() {
         $("[placeholder='Город']").setValue("");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
@@ -60,7 +60,7 @@ public class RegistrationTest {
     }
 
     @Test
-    void shouldRegisterErrorNotFindCity() {
+    void shouldRegisterErrorNotFindCityTest() {
         $("[placeholder='Город']").setValue("Енгельс");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
@@ -74,7 +74,7 @@ public class RegistrationTest {
     }
 
     @Test
-    void shouldRegisterErrorEmptyFieldData() {
+    void shouldRegisterErrorEmptyFieldDataTest() {
         $("[placeholder='Город']").setValue("Новосибирск");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
@@ -88,7 +88,7 @@ public class RegistrationTest {
     }
 
     @Test
-    void shouldRegisterErrorFieldData() {
+    void shouldRegisterErrorFieldDataTest() {
         $("[placeholder='Город']").setValue("Новосибирск");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
@@ -102,7 +102,7 @@ public class RegistrationTest {
     }
 
     @Test
-    void shouldRegisterErrorEmptyFieldName() {
+    void shouldRegisterErrorEmptyFieldNameTest() {
         $("[placeholder='Город']").setValue("Новосибирск");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
@@ -116,7 +116,7 @@ public class RegistrationTest {
     }
 
     @Test
-    void shouldRegisterErrorFieldNameShouldContainRUSCharacter() {
+    void shouldRegisterErrorFieldNameShouldContainRUSCharacterTest() {
         $("[placeholder='Город']").setValue("Новосибирск");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
@@ -130,7 +130,7 @@ public class RegistrationTest {
     }
 
     @Test
-    void shouldRegisterErrorEmptyFieldPhone() {
+    void shouldRegisterErrorEmptyFieldPhoneTest() {
         $("[placeholder='Город']").setValue("Новосибирск");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
@@ -144,7 +144,7 @@ public class RegistrationTest {
     }
 
     @Test
-    void shouldRegisterErrorFieldPhoneNoOneCharacter() {
+    void shouldRegisterErrorFieldPhoneNoOneCharacterTest() {
         $("[placeholder='Город']").setValue("Новосибирск");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
@@ -158,7 +158,7 @@ public class RegistrationTest {
     }
 
     @Test
-    void shouldRegisterErrorFieldPhoneNoMoreThirteenCharacter() {
+    void shouldRegisterErrorFieldPhoneNoMoreThirteenCharacterTest() {
         $("[placeholder='Город']").setValue("Новосибирск");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
@@ -172,7 +172,7 @@ public class RegistrationTest {
     }
 
     @Test
-    void shouldRegisterErrorFieldPhoneNoPlusSign() {
+    void shouldRegisterErrorFieldPhoneNoPlusSignTest() {
         $("[placeholder='Город']").setValue("Новосибирск");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
@@ -186,7 +186,7 @@ public class RegistrationTest {
     }
 
     @Test
-    void shouldRegisterErrorCheckboxIsNotSet() {
+    void shouldRegisterErrorCheckboxIsNotSetTest() {
         $("[placeholder='Город']").setValue("Новосибирск");
         $("[placeholder='Дата встречи']").doubleClick();
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
