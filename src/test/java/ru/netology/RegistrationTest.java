@@ -20,14 +20,13 @@ public class RegistrationTest {
 
     @BeforeEach
     void setUp() {
-        Configuration.headless = true;
         Configuration.holdBrowserOpen = true;
         Configuration.browserSize = "1800x1100";
         Configuration.timeout = 15000;
         open("http://localhost:9999/");
     }
 
-    public String generateDate(long addDays, String pattern) {
+    private String generateDate(long addDays, String pattern) {
         return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern(pattern));
     }
 
@@ -42,7 +41,9 @@ public class RegistrationTest {
         $("[name='phone']").setValue("+71234567890");
         $("[data-test-id='agreement']").click();
         $x("//div/button").click();
-        $x("//div[contains(text(), 'Встреча успешно забронирована')]").shouldBe(visible);
+        $(".notification__content")
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate))
+                .shouldBe(Condition.visible);
     }
 
     @Test

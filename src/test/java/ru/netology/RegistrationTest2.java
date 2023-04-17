@@ -22,63 +22,73 @@ public class RegistrationTest2 {
 
     @BeforeEach
     void setUp() {
-        Configuration.headless = true;
         Configuration.holdBrowserOpen = true;
         Configuration.browserSize = "1800x1100";
         Configuration.timeout = 15000;
         open("http://localhost:9999/");
     }
 
-    public String generateDate(int addDays, int addMonth, int addYears, String pattern) {
-        return LocalDate.now().plusDays(addDays).plusMonths(addMonth).plusYears(addYears).format(DateTimeFormatter.ofPattern(pattern));
+    private String generateDate(int addDays, String pattern) {
+        return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern(pattern));
     }
 
     @Test
-    void shouldRegisterByAccountWithCityPopUpTest() {
+    void shouldRegisterByAccountWithCalendarPopUpForOneWeekAndCheckPopUpCityTest() {
         $("[placeholder='Город']").setValue("Ка");
         $(byText("Калининград")).click();
-        String planningDate = generateDate(7, 0, 0, "dd.MM.yyyy");
-        $("[data-test-id='date'] input").setValue(planningDate);
-        $("[name='name']").setValue("Иванов Иван");
-        $("[name='phone']").setValue("+71234567890");
-        $("[data-test-id='agreement']").click();
-        $x("//div/button").click();
-        $x("//div[contains(text(), 'Встреча успешно забронирована')]").shouldBe(visible);
-    }
-
-    @Test
-    void shouldRegisterByAccountWithCalendarPopUpForOneWeekTest() {
-        $("[placeholder='Город']").setValue("Ка");
-        $(byText("Калининград")).click();
-        String planningDate = generateDate(7, 0, 0, "dd.MM.yyyy");
+        String planningDate = generateDate(7, "dd.MM.yyyy");
+        if (!generateDate(3, "MM").equals(generateDate(7, "MM"))) {
+            $(".icon_name_calendar").click();
+            $$("[data-disabled]").filter(visible).get(1).click();
+        }
         $(".icon_name_calendar").click();
-        $x("//div//tr[5]/td[5]").click();
+        $$("[data-day]").find(Condition.text(generateDate(7, "d"))).click();
         $("[name='name']").setValue("Иванов Иван");
         $("[name='phone']").setValue("+71234567890");
         $("[data-test-id='agreement']").click();
         $x("//div/button").click();
-        $x("//div[contains(text(), 'Встреча успешно забронирована')]").shouldBe(visible);
+        $(".notification__content")
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate))
+                .shouldBe(Condition.visible);
     }
 
     @Test
     void shouldCalendarMoveToTheNextMonthTest() {
+        $("[placeholder='Город']").setValue("Ка");
+        $(byText("Калининград")).click();
+        String planningDate = generateDate(15, "dd.MM.yyyy");
+        if (!generateDate(3, "MM").equals(generateDate(15, "MM"))) {
+            $(".icon_name_calendar").click();
+            $$("[data-disabled]").filter(visible).get(1).click();
+        }
         $(".icon_name_calendar").click();
-        $x("/html/body/div[2]/div//div[4]").click();
-        $(byText("Май 2023")).shouldBe(Condition.visible);
+        $$("[data-day]").find(Condition.text(generateDate(15, "d"))).click();
+        $("[name='name']").setValue("Иванов Иван");
+        $("[name='phone']").setValue("+71234567890");
+        $("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $(".notification__content")
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate))
+                .shouldBe(Condition.visible);
     }
 
     @Test
     void shouldCalendarMoveToTheNextYearTest() {
+        $("[placeholder='Город']").setValue("Ка");
+        $(byText("Калининград")).click();
+        String planningDate = generateDate(365, "dd.MM.yyyy");
+        if (!generateDate(3, "yyyy").equals(generateDate(365, "yyyy"))) {
+            $(".icon_name_calendar").click();
+            $$("[data-disabled]").filter(visible).get(0).click();
+        }
         $(".icon_name_calendar").click();
-        $x("/html/body/div[2]/div//div[3]").click();
-        $(byText("Апрель 2024")).shouldBe(Condition.visible);
-    }
-
-    @Test
-    void shouldCalendarMoveToTheBackTest() {
-        $(".icon_name_calendar").click();
-        $x("/html/body/div[2]/div//div[4]").click();
-        $x("/html/body/div[2]/div//div[2]").click();
-        $(byText("Апрель 2023")).shouldBe(Condition.visible);
+        $$("[data-day]").find(Condition.text(generateDate(365, "d"))).click();
+        $("[name='name']").setValue("Иванов Иван");
+        $("[name='phone']").setValue("+71234567890");
+        $("[data-test-id='agreement']").click();
+        $x("//div/button").click();
+        $(".notification__content")
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate))
+                .shouldBe(Condition.visible);
     }
 }
